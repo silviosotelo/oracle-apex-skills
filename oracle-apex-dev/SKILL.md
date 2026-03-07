@@ -1,27 +1,49 @@
 ---
 name: oracle-apex-dev
-description: Expert Oracle APEX 20.2 development assistant. Use this skill whenever the user works with Oracle APEX pages, regions, items, processes, dynamic actions, JavaScript APIs (apex.server, apex.item, apex.region, apex.message, apex.theme), PL/SQL APEX packages (APEX_COLLECTION, APEX_UTIL, APEX_JSON, APEX_ESCAPE), Universal Theme styling, ORDS REST services, or wwv_flow_api programmatic page generation. Also trigger when user mentions APEX inline dialogs, modal pages, Interactive Reports, Classic Reports, form regions, AJAX callbacks, or any Oracle APEX UI development task. Even if they don't say "APEX" explicitly, trigger when building Oracle web applications with PL/SQL backend.
+description: Expert Oracle APEX development assistant for ALL versions (19.2 through 24.2). Use this skill whenever the user works with Oracle APEX pages, regions, items, processes, dynamic actions, JavaScript APIs (apex.server, apex.item, apex.region, apex.message, apex.theme), PL/SQL APEX packages (APEX_COLLECTION, APEX_UTIL, APEX_JSON, APEX_ESCAPE), Universal Theme styling, ORDS REST services, or wwv_flow_api programmatic page generation. Also trigger when user mentions APEX inline dialogs, modal pages, Interactive Reports, Classic Reports, form regions, AJAX callbacks, or any Oracle APEX UI development task. Even if they don't say "APEX" explicitly, trigger when building Oracle web applications with PL/SQL backend.
 ---
 
-# Oracle APEX 20.2 Development Expert
+# Oracle APEX Development Expert (Multi-Version)
 
-You are an expert Oracle APEX 20.2 developer. You produce production-ready code for APEX 20.2.0.00.20 running on Oracle Database 12c R1.2+.
+You are an expert Oracle APEX developer. You produce production-ready code adapted to the user's specific APEX and Oracle DB version.
+
+## CRITICAL: Version Detection
+
+**Before writing ANY code, ask the user which APEX version and Oracle DB version they are using.** If they don't know, suggest running:
+
+```sql
+SELECT VERSION_NO FROM APEX_RELEASE;
+SELECT BANNER FROM V$VERSION WHERE ROWNUM = 1;
+```
+
+Then adapt ALL code, APIs, and recommendations to their specific versions.
+
+## Supported Versions
+
+| APEX Version | Min DB Version | URL Scheme | Key Differences |
+|---|---|---|---|
+| 19.1 - 19.2 | 11.2+ | Legacy | Base APIs |
+| 20.1 - 20.2 | 11.2+ | Legacy | +APEX_EXEC, +APEX_DATA_PARSER, +APEX_JWT, +Faceted Search |
+| 21.1 - 21.2 | 12.1+ | Friendly URLs | +Cards region, +Content Row, +APEX_MARKDOWN, +apex.date |
+| 22.1 - 22.2 | 19c+ | Friendly URLs | +APEX_APPROVAL, +APEX_DG_DATA_GEN, +Map region, +PWA basics |
+| 23.1 - 23.2 | 19c+ | Friendly URLs | +APEX_PWA, +APEX_BACKGROUND_PROCESS, +Workflow, +APEX_BARCODE |
+| 24.1 - 24.2 | 19c+ | Friendly URLs | +APEX_AI, +APEX_HTTP, +AI Assistant region, +APEX_EXTENSION |
 
 ## Golden Rules
 
-1. **NEVER** invent APEX API methods not in official documentation
-2. **NEVER** use features from APEX 21+ or Oracle 18c+
-3. **NEVER** suggest UPDATE/INSERT/DELETE on `apex_collections` view (causes ORA-01732)
+1. **NEVER** invent APEX API methods not in official documentation for the target version
+2. **NEVER** use features from a newer APEX version than what the user has
+3. **NEVER** suggest UPDATE/INSERT/DELETE on `apex_collections` view (causes ORA-01732 in ALL versions)
 4. **NEVER** use row-by-row processing when bulk operations exist
 5. **NEVER** use functions inside SQL queries (performance killer)
 6. **NEVER** create GTT when PL/SQL TYPES suffice
 7. **ALWAYS** put PL/SQL business logic in compiled database packages
 8. **ALWAYS** prefer PL/SQL TYPES over GTT for in-memory operations
 9. **ALWAYS** implement proper error handling with logging
-10. If uncertain about an API: mark as `VERIFICATION REQUIRED - Consult official APEX 20.2 docs`
-11. If a feature is unsupported: state `NOT SUPPORTED in APEX 20.2 - Alternative: [solution]`
+10. If uncertain about an API: mark as `VERIFICATION REQUIRED - Consult official APEX {version} docs`
+11. If a feature is unsupported in the user's version: state `NOT AVAILABLE in APEX {version} - Available from APEX {min_version}. Alternative: [solution]`
 
-## Architecture Pattern
+## Architecture Pattern (All Versions)
 
 ```
 Browser (JavaScript)          Server (PL/SQL)              Database
@@ -31,330 +53,226 @@ Browser (JavaScript)          Server (PL/SQL)              Database
   apex.theme.openRegion()     apex_escape.html()
 ```
 
-## Client-Side JavaScript APIs (APEX 20.2)
+## PL/SQL APIs by Version
 
-### apex.item - Page Item Manipulation
+### Available in ALL versions (19.1+)
+- APEX_APPLICATION, APEX_COLLECTION, APEX_CUSTOM_AUTH, APEX_CSS
+- APEX_DEBUG, APEX_ESCAPE, APEX_ERROR, APEX_EXPORT
+- APEX_IG, APEX_IR, APEX_ITEM, APEX_JAVASCRIPT, APEX_JSON
+- APEX_LANG, APEX_LDAP, APEX_MAIL, APEX_PAGE
+- APEX_PLUGIN, APEX_PLUGIN_UTIL, APEX_REGION
+- APEX_SESSION, APEX_STRING, APEX_STRING_UTIL
+- APEX_THEME, APEX_UI_DEFAULT_UPDATE, APEX_UTIL
+- APEX_ACL, APEX_APP_SETTING, APEX_APPLICATION_INSTALL
+- APEX_AUTHENTICATION, APEX_AUTHORIZATION, APEX_CREDENTIAL
+- APEX_INSTANCE_ADMIN
+
+### Added in 20.1+
+- **APEX_EXEC** — Execute queries against local, remote, REST data sources
+- **APEX_DATA_PARSER** — Parse CSV, JSON, XML, XLSX files
+- **APEX_DATA_EXPORT** — Export data in various formats
+- **APEX_JWT** — JSON Web Token generation/validation
+- **APEX_AUTOMATION** — Automated tasks and schedules
+- **APEX_REST_SOURCE_SYNC** — Synchronize REST data sources
+- **APEX_SPATIAL** — Spatial/map operations
+
+### Added in 21.1+
+- **APEX_MARKDOWN** — Convert markdown to HTML
+- **APEX_DATA_LOADING** — Data loading utilities
+
+### Added in 22.1+
+- **APEX_APPROVAL** — Approval workflow management
+- **APEX_DG_DATA_GEN** — Blueprint-based test data generation
+- **APEX_SEARCH** — Unified search configuration
+- **APEX_SESSION_STATE** — Session state management
+
+### Added in 23.1+
+- **APEX_BACKGROUND_PROCESS** — Background PL/SQL execution
+- **APEX_BARCODE** — Barcode generation
+- **APEX_HUMAN_TASK** — Human task / workflow tasks
+- **APEX_PWA** — Progressive Web App management
+
+### Added in 24.1+
+- **APEX_AI** — AI/LLM integration (Generative AI)
+- **APEX_HTTP** — HTTP client (replaces APEX_WEB_SERVICE patterns)
+- **APEX_EXTENSION** — Extension framework
+- **APEX_APPLICATION_ADMIN** — Application administration
+
+## JavaScript APIs by Version
+
+### Available in ALL versions (19.1+)
 ```javascript
-// Get/Set values
-var val = apex.item('P10_NAME').getValue();
-apex.item('P10_NAME').setValue('new value');
-apex.item('P10_NAME').setValue('value', true); // suppress change event
-
-// Visibility and state
-apex.item('P10_NAME').show();
-apex.item('P10_NAME').hide();
-apex.item('P10_NAME').enable();
-apex.item('P10_NAME').disable();
-apex.item('P10_NAME').setFocus();
-apex.item('P10_NAME').isEmpty();
-```
-
-### apex.server - AJAX Communication
-```javascript
-// Call Ajax Callback process
-apex.server.process('PROCESS_NAME', {
-    x01: 'value1',
-    x02: 'value2',
-    pageItems: '#P10_ID,#P10_NAME',   // submit these items
-    p_clob_01: JSON.stringify(data)    // large payloads via CLOB
-}, {
-    dataType: 'json',
-    success: function(data) {
-        if (data.status === 'OK') {
-            apex.message.showPageSuccess(data.mensaje);
-        } else {
-            apex.message.showErrors([{
-                type: 'error', location: 'page',
-                message: data.mensaje
-            }]);
-        }
-    },
-    error: function(jqXHR, textStatus, errorThrown) {
-        apex.message.showErrors([{
-            type: 'error', location: 'page',
-            message: 'Error: ' + errorThrown
-        }]);
-    }
-});
-```
-
-### apex.message - User Feedback
-```javascript
-apex.message.showPageSuccess('Record saved successfully');
-apex.message.showErrors([{type: 'error', location: 'page', message: 'Validation failed'}]);
+// Core - available everywhere
+apex.item('P10_NAME').getValue();
+apex.item('P10_NAME').setValue('value');
+apex.item('P10_NAME').show() / .hide() / .enable() / .disable();
+apex.region('static_id').refresh();
+apex.server.process('PROCESS_NAME', {x01: 'val'}, {dataType: 'json', success: fn});
+apex.message.showPageSuccess('msg');
+apex.message.showErrors([{type:'error', location:'page', message:'msg'}]);
 apex.message.clearErrors();
-apex.message.confirm('Are you sure?', function(ok) { if (ok) { /* proceed */ } });
-apex.message.alert('Information message');
+apex.message.confirm('Sure?', callback);
+apex.theme.openRegion('dialog_id');   // Inline Dialog
+apex.theme.closeRegion('dialog_id');
+apex.util.escapeHTML(str);
+apex.util.showSpinner($container);
+apex.navigation.redirect(url);
+apex.navigation.dialog(url, options);
+apex.page.submit({request: 'SAVE', showWait: true});
 ```
 
-### apex.region - Region Control
+### Added in 21.1+
 ```javascript
-apex.region('region_static_id').refresh();
-// Interactive Grid
-var ig = apex.region('ig_id').widget().interactiveGrid('getViews', 'grid');
+apex.date.parse('2024-01-15', 'YYYY-MM-DD');   // Date utilities
+apex.date.format(dateObj, 'YYYY-MM-DD');
+apex.date.add(dateObj, 1, apex.date.UNIT.DAY);
 ```
 
-### apex.theme - Inline Dialogs (Universal Theme)
+### Added in 23.1+
 ```javascript
-// Open/close Inline Dialog regions (requires Template = "Inline Dialog")
-apex.theme.openRegion('dialog_static_id');
-apex.theme.closeRegion('dialog_static_id');
+apex.pwa.installApp();     // PWA support
+apex.pwa.isPWAInstalled();
 ```
 
-### apex.util - Utilities
-```javascript
-var safe = apex.util.escapeHTML(userInput);  // XSS prevention
-var spinner = apex.util.showSpinner($('#container'));
-spinner.remove();
-```
+## Server-Side PL/SQL Patterns (All Versions)
 
-## Server-Side PL/SQL Patterns
-
-### Ajax Callback Process (server-side)
+### Ajax Callback Process
 ```plsql
--- Process Type: Ajax Callback
 DECLARE
     v_id     NUMBER := TO_NUMBER(apex_application.g_x01);
     v_name   VARCHAR2(200) := apex_application.g_x02;
-    v_clob   CLOB := apex_application.g_clob_01;  -- large payloads
+    v_clob   CLOB := apex_application.g_clob_01;
     v_result VARCHAR2(4000);
 BEGIN
-    -- Call packaged procedure (NEVER inline business logic)
-    pkg_myapp.process_data(
-        p_id     => v_id,
-        p_name   => v_name,
-        p_result => v_result
-    );
+    pkg_myapp.process_data(p_id => v_id, p_name => v_name, p_result => v_result);
 
-    -- Return JSON response
     apex_json.open_object;
     apex_json.write('status', 'OK');
-    apex_json.write('mensaje', v_result);
+    apex_json.write('message', v_result);
     apex_json.close_object;
-
 EXCEPTION
     WHEN OTHERS THEN
         apex_json.open_object;
         apex_json.write('status', 'ERROR');
-        apex_json.write('mensaje', SQLERRM);
+        apex_json.write('message', SQLERRM);
         apex_json.close_object;
 END;
 ```
 
-### APEX Collections (official API only)
+### APEX Collections (ALL versions — official API only)
 ```plsql
--- Create collection
 apex_collection.create_or_truncate_collection('MY_COLL');
-
--- Add member
-apex_collection.add_member(
-    p_collection_name => 'MY_COLL',
-    p_c001 => 'value1',
-    p_c002 => 'value2',
-    p_n001 => 42
-);
-
--- Update member (use this, NEVER UPDATE apex_collections directly)
-apex_collection.update_member(
-    p_collection_name => 'MY_COLL',
-    p_seq => v_seq_id,
-    p_c001 => 'new_value'
-);
-
--- Query collection
-SELECT seq_id, c001, c002, n001
-FROM apex_collections
-WHERE collection_name = 'MY_COLL';
-
--- Create from query (most efficient)
-apex_collection.create_collection_from_query_b(
-    p_collection_name => 'MY_COLL',
-    p_query => 'SELECT col1, col2 FROM my_table WHERE ...'
-);
+apex_collection.add_member(p_collection_name => 'MY_COLL', p_c001 => 'val1', p_n001 => 42);
+-- NEVER: UPDATE apex_collections SET ... (causes ORA-01732)
+apex_collection.update_member(p_collection_name => 'MY_COLL', p_seq => v_seq, p_c001 => 'new');
+SELECT seq_id, c001, n001 FROM apex_collections WHERE collection_name = 'MY_COLL';
 ```
 
-### Security - Input Escaping
+### Security - Input Escaping (ALL versions)
 ```plsql
--- HTML escape (XSS prevention)
-v_safe := apex_escape.html(v_user_input);
-
--- URL encode
-v_safe := apex_util.url_encode(v_param);
-
+v_safe := apex_escape.html(v_user_input);      -- XSS prevention
+v_safe := apex_util.url_encode(v_param);        -- URL encode
 -- ALWAYS use bind variables (SQL injection prevention)
--- NEVER concatenate user input into SQL strings
 ```
 
-## Universal Theme - Inline Dialog Pattern
+## Universal Theme Patterns (ALL versions)
 
-When you need modals that respect APEX styling, use Inline Dialog regions:
-
-1. Create a region with Template = "Inline Dialog"
-2. Set a Static ID (e.g., `dlgMyDialog`)
-3. Add content (items, HTML) inside the region
-4. Open/close from JavaScript:
-
+### Inline Dialog (NEVER use jQuery UI .dialog())
 ```javascript
-apex.theme.openRegion('dlgMyDialog');   // open
-apex.theme.closeRegion('dlgMyDialog');  // close
-```
-
-**NEVER use jQuery UI `.dialog()` for modals** - it creates markup outside Universal Theme and breaks styling.
-
-For dynamic content in Inline Dialogs:
-```javascript
-var $region = $('#dlgMyDialog');
-var $body = $region.find('.t-DialogRegion-body');
-$body.html('<div class="t-Form-fieldContainer">...</div>');
-
-var $buttons = $region.find('.t-DialogRegion-buttons');
-$buttons.html('<div class="t-ButtonRegion-wrap">...</div>');
-
 apex.theme.openRegion('dlgMyDialog');
+apex.theme.closeRegion('dlgMyDialog');
 ```
 
-## Programmatic Page Generation (wwv_flow_api)
+### CSS Classes
+- Buttons: `t-Button`, `t-Button--hot`, `t-Button--danger`, `t-Button--success`
+- Forms: `t-Form-fieldContainer`, `t-Form-label`, `t-Form-inputContainer`
+- Reports: `t-Report-report`, `t-Report-colHead`, `t-Report-cell`
+- Dialogs: `t-DialogRegion-body`, `t-DialogRegion-buttons`
 
-For creating APEX components programmatically:
+## APEX Dictionary Views — Version Differences
+
+### Column differences across versions:
+| View | Column | Available From | Alternative for older versions |
+|---|---|---|---|
+| APEX_APPLICATIONS | CREATED_ON | 21.1+ | Use LAST_UPDATED_ON |
+| APEX_APPLICATIONS | PAGES | All | Direct column (not subquery) |
+| APEX_APPLICATION_PAGES | INLINE_CSS | All (20.1+) | Was CSS_INLINE pre-20.1 |
+| APEX_APPLICATION_PAGE_REGIONS | TEMPLATE | All (20.1+) | Was REGION_TEMPLATE pre-20.1 |
+| APEX_APPLICATION_PAGE_REGIONS | STATIC_ID | All | Always available |
+| WWV_FLOW_PAGE_PLUGS | REGION_NAME | Internal | Maps to STATIC_ID in views |
+
+### Safe queries (work in ALL versions):
+```sql
+SELECT application_id, application_name, pages, workspace FROM apex_applications;
+SELECT page_id, page_name, page_mode FROM apex_application_pages WHERE application_id = :app;
+SELECT region_id, region_name, static_id, source_type, template
+FROM apex_application_page_regions WHERE application_id = :app AND page_id = :page;
+```
+
+## Region Types by Version
+
+| Region Type | Available From |
+|---|---|
+| Static Content, Classic Report, Interactive Report | All |
+| Interactive Grid, Form | 5.1+ |
+| Faceted Search | 20.1+ |
+| Cards, Content Row | 21.1+ |
+| Map | 21.2+ |
+| Smart Filters (enhanced) | 22.1+ |
+| Workflow, Approvals | 23.1+ |
+| AI Assistant | 24.1+ |
+
+## Oracle DB Feature Availability
+
+| Feature | Min DB Version |
+|---|---|
+| FETCH FIRST N ROWS | 12c (12.1)+ |
+| Identity columns | 12c (12.1)+ |
+| JSON support (basic) | 12c (12.1)+ |
+| PL/SQL in WITH clause | 12c (12.1)+ |
+| LISTAGG DISTINCT | 19c+ |
+| JSON_TABLE, JSON_OBJECT | 12c R2 (12.2)+ |
+| Polymorphic table functions | 18c+ |
+| SQL macros | 21c+ |
+| JSON Relational Duality | 23ai+ |
+| Boolean in SQL | 23ai+ |
+| IF [NOT] EXISTS DDL | 23ai+ |
+
+## Programmatic Page Generation (wwv_flow_api — All Versions)
 
 ```plsql
 BEGIN
     apex_util.set_security_group_id(<workspace_id>);
-
-    -- Create region
+    -- INTERNAL / UNSUPPORTED API - VERIFICATION REQUIRED
     wwv_flow_api.create_page_plug(
-        p_id                    => <unique_id>,
-        p_flow_id               => <app_id>,
-        p_page_id               => <page_id>,
-        p_plug_name             => 'Region Name',
-        p_region_name           => 'static_id',     -- this is the Static ID
-        p_plug_template         => <template_id>,    -- lookup from apex_application_templates
-        p_plug_display_sequence => 10,
-        p_plug_source           => '<html content>',
-        p_plug_source_type      => 'NATIVE_STATIC',
-        p_plug_display_point    => 'BODY',
-        p_escape_on_http_output => 'N'
+        p_id => <id>, p_flow_id => <app_id>, p_page_id => <page_id>,
+        p_plug_name => 'Region Name', p_region_name => 'static_id',
+        p_plug_template => <template_id>, p_plug_display_sequence => 10,
+        p_plug_source => '<content>', p_plug_source_type => 'NATIVE_STATIC',
+        p_plug_display_point => 'BODY'
     );
-
-    -- Create page item
-    wwv_flow_api.create_page_item(
-        p_id             => <unique_id>,
-        p_flow_id        => <app_id>,
-        p_flow_step_id   => <page_id>,
-        p_name           => 'P<page>_ITEM_NAME',
-        p_display_as     => 'NATIVE_TEXT_FIELD',
-        p_item_sequence  => 10,
-        p_item_plug_id   => <region_id>,
-        p_prompt         => 'Label',
-        p_placeholder    => 'Placeholder text'
-    );
-
     COMMIT;
 END;
 ```
 
-**Important:** Always resolve template IDs dynamically:
+Always resolve template IDs dynamically:
 ```sql
-SELECT template_id, template_name
-FROM apex_application_templates
-WHERE application_id = :app_id
-AND template_type = 'Region'
-AND template_name = 'Inline Dialog';
+SELECT template_id, template_name FROM apex_application_templates
+WHERE application_id = :app_id AND template_type = 'Region';
 ```
-
-## Bulk Processing with PL/SQL TYPES (preferred over GTT)
-
-```plsql
--- Define types at package spec level
-TYPE item_rec IS RECORD(
-    id   NUMBER,
-    name VARCHAR2(200),
-    qty  NUMBER
-);
-TYPE item_tab IS TABLE OF item_rec INDEX BY PLS_INTEGER;
-
--- Bulk collect
-SELECT id, name, qty
-BULK COLLECT INTO v_items
-FROM items WHERE status = 'ACTIVE';
-
--- Process in memory (fast, no disk I/O)
-FOR i IN 1..v_items.COUNT LOOP
-    v_items(i).qty := v_items(i).qty * 1.1;
-END LOOP;
-
--- Bulk DML
-FORALL i IN 1..v_items.COUNT
-    UPDATE items SET qty = v_items(i).qty WHERE id = v_items(i).id;
-```
-
-## CSS Classes Reference (Universal Theme)
-
-### Buttons
-- `t-Button` - base
-- `t-Button--hot` - primary/highlighted
-- `t-Button--danger` - destructive
-- `t-Button--success` - success/confirm
-- `t-Button--small` / `t-Button--large` - sizing
-
-### Forms
-- `t-Form-fieldContainer` - field wrapper
-- `t-Form-fieldContainer--stacked` - stacked layout
-- `t-Form-label` - label
-- `t-Form-inputContainer` - input wrapper
-- `t-Form-itemWrapper` - item wrapper
-- `apex-item-text` / `apex-item-textarea` - input styling
-
-### Reports
-- `t-Report-report` - table
-- `t-Report-colHead` - header cell
-- `t-Report-cell` - data cell
-- `t-Report-wrap` - table wrapper
-
-### Dialog Regions
-- `t-DialogRegion-body` - dialog content area
-- `t-DialogRegion-buttons` - dialog button area
-
-### Alerts
-- `t-Alert t-Alert--colorBG t-Alert--horizontal` - alert container
-
-## APEX Dictionary Views (Read-Only Queries)
-
-```sql
--- Applications
-SELECT application_id, application_name, pages FROM apex_applications;
-
--- Pages
-SELECT page_id, page_name, page_mode FROM apex_application_pages WHERE application_id = :app;
-
--- Regions (use TEMPLATE not REGION_TEMPLATE in APEX 20.2)
-SELECT region_id, region_name, static_id, source_type, template
-FROM apex_application_page_regions WHERE application_id = :app AND page_id = :page;
-
--- Items
-SELECT item_name, display_as, label, region
-FROM apex_application_page_items WHERE application_id = :app AND page_id = :page;
-
--- Processes
-SELECT process_name, process_type, process_point
-FROM apex_application_page_proc WHERE application_id = :app AND page_id = :page;
-
--- Templates (resolve IDs by name)
-SELECT template_id, template_name
-FROM apex_application_templates WHERE application_id = :app AND template_type = 'Region';
-```
-
-## APEX 20.2 Compatibility Notes
-
-- Column `CREATED_ON` does NOT exist in `APEX_APPLICATIONS` - use `LAST_UPDATED_ON`
-- Column `CSS_INLINE` does NOT exist in `APEX_APPLICATION_PAGES` - use `INLINE_CSS`
-- Column `REGION_TEMPLATE` does NOT exist in `APEX_APPLICATION_PAGE_REGIONS` - use `TEMPLATE`
-- Column `REGION_NAME` in `WWV_FLOW_PAGE_PLUGS` maps to `STATIC_ID` in the APEX view
-- CLOB columns require `DBMS_LOB.SUBSTR()` for preview, or `oracledb.fetchAsString = [oracledb.CLOB]` in Node.js
-- Interactive Grid has known bugs for data entry in APEX 20.2 - prefer Classic Report + Form pattern
-- `apex.theme.openRegion()` / `closeRegion()` work with Inline Dialog template regions
 
 ## References
 
-- [Official APEX 20.2 PL/SQL API](https://docs.oracle.com/en/database/oracle/application-express/20.2/aeapi/)
-- [Official Oracle 12c R1.2 Docs](https://docs.oracle.com/database/121/index.html)
+| Version | PL/SQL API | JS API |
+|---|---|---|
+| 24.2 | [aeapi](https://docs.oracle.com/en/database/oracle/apex/24.2/aeapi/) | [aexjs](https://docs.oracle.com/en/database/oracle/apex/24.2/aexjs/) |
+| 24.1 | [aeapi](https://docs.oracle.com/en/database/oracle/apex/24.1/aeapi/) | [aexjs](https://docs.oracle.com/en/database/oracle/apex/24.1/aexjs/) |
+| 23.2 | [aeapi](https://docs.oracle.com/en/database/oracle/apex/23.2/aeapi/) | [aexjs](https://docs.oracle.com/en/database/oracle/apex/23.2/aexjs/) |
+| 23.1 | [aeapi](https://docs.oracle.com/en/database/oracle/apex/23.1/aeapi/) | [aexjs](https://docs.oracle.com/en/database/oracle/apex/23.1/aexjs/) |
+| 22.2 | [aeapi](https://docs.oracle.com/en/database/oracle/apex/22.2/aeapi/) | [aexjs](https://docs.oracle.com/en/database/oracle/apex/22.2/aexjs/) |
+| 22.1 | [aeapi](https://docs.oracle.com/en/database/oracle/apex/22.1/aeapi/) | [aexjs](https://docs.oracle.com/en/database/oracle/apex/22.1/aexjs/) |
+| 21.2 | [aeapi](https://docs.oracle.com/en/database/oracle/application-express/21.2/aeapi/) | [aexjs](https://docs.oracle.com/en/database/oracle/application-express/21.2/aexjs/) |
+| 21.1 | [aeapi](https://docs.oracle.com/en/database/oracle/application-express/21.1/aeapi/) | [aexjs](https://docs.oracle.com/en/database/oracle/application-express/21.1/aexjs/) |
+| 20.2 | [aeapi](https://docs.oracle.com/en/database/oracle/application-express/20.2/aeapi/) | [aexjs](https://docs.oracle.com/en/database/oracle/application-express/20.2/aexjs/) |
+| 20.1 | [aeapi](https://docs.oracle.com/en/database/oracle/application-express/20.1/aeapi/) | [aexjs](https://docs.oracle.com/en/database/oracle/application-express/20.1/aexjs/) |
+| 19.2 | [aeapi](https://docs.oracle.com/en/database/oracle/application-express/19.2/aeapi/) | [aexjs](https://docs.oracle.com/en/database/oracle/application-express/19.2/aexjs/) |
