@@ -22,12 +22,12 @@ Then adapt ALL code, APIs, and recommendations to their specific versions.
 
 | APEX Version | Min DB Version | URL Scheme | Key Differences |
 |---|---|---|---|
-| 19.1 - 19.2 | 11.2+ | Legacy | Base APIs |
-| 20.1 - 20.2 | 11.2+ | Legacy | +APEX_EXEC, +APEX_DATA_PARSER, +APEX_JWT, +Faceted Search |
-| 21.1 - 21.2 | 12.1+ | Friendly URLs | +Cards region, +Content Row, +APEX_MARKDOWN, +apex.date |
-| 22.1 - 22.2 | 19c+ | Friendly URLs | +APEX_APPROVAL, +APEX_DG_DATA_GEN, +Map region, +PWA basics |
-| 23.1 - 23.2 | 19c+ | Friendly URLs | +APEX_PWA, +APEX_BACKGROUND_PROCESS, +Workflow, +APEX_BARCODE |
-| 24.1 - 24.2 | 19c+ | Friendly URLs | +APEX_AI, +APEX_HTTP, +AI Assistant region, +APEX_EXTENSION |
+| 19.1 - 19.2 | 11.2.0.4+ | Legacy (f?p=) | Base APIs, Form Region (19.1), Faceted Search (19.2) |
+| 20.1 - 20.2 | 11.2.0.4+ | Friendly (20.1+) | +Cards (20.2), +Automations, +APEX_DATA_EXPORT, +APEX_EXEC |
+| 21.1 - 21.2 | 12.1.0.2+ | Friendly URLs | +Map region, +APEX_MARKDOWN, +apex.date, +PWA basics (21.2) |
+| 22.1 - 22.2 | 12.1.0.2+ | Friendly URLs | +APEX_APPROVAL, +Dynamic Content, +Invoke API process |
+| 23.1 - 23.2 | 19c+ | Friendly URLs | +Template Components, +Workflow, +APEX_PWA, +Combobox, +QR Code |
+| 24.1 - 24.2 | 19c+ | Friendly URLs | +APEX_AI, +Select One/Many, +Vector Search (24.2), +JSON Sources |
 
 ## Golden Rules
 

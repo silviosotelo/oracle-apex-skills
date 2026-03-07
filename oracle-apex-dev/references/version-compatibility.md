@@ -4,14 +4,14 @@
 
 | APEX | Release Date | Min DB | URL Format | Theme |
 |---|---|---|---|---|
-| 19.1 | 2019-Q1 | 11.2 | Legacy (f?p=) | Universal Theme 42 |
-| 19.2 | 2019-Q4 | 11.2 | Legacy | UT 42 |
-| 20.1 | 2020-Q2 | 11.2 | Legacy | UT 42 |
-| 20.2 | 2020-Q4 | 11.2 | Legacy | UT 42 |
-| 21.1 | 2021-Q2 | 12.1 | Friendly URLs | UT 42 |
-| 21.2 | 2021-Q4 | 12.1 | Friendly URLs | UT 42 |
-| 22.1 | 2022-Q2 | 19c | Friendly URLs | UT 42 |
-| 22.2 | 2022-Q4 | 19c | Friendly URLs | UT 42 |
+| 19.1 | 2019-Q1 | 11.2.0.4 | Legacy (f?p=) | Universal Theme 42 |
+| 19.2 | 2019-Q4 | 11.2.0.4 | Legacy | UT 42 |
+| 20.1 | 2020-Q2 | 11.2.0.4 | Friendly URLs (default new apps) | UT 42 |
+| 20.2 | 2020-Q4 | 11.2.0.4 | Friendly URLs | UT 42 |
+| 21.1 | 2021-Q2 | 12.1.0.2 | Friendly URLs | UT 42 |
+| 21.2 | 2021-Q4 | 12.1.0.2 | Friendly URLs | UT 42 |
+| 22.1 | 2022-Q2 | 12.1.0.2 | Friendly URLs | UT 42 |
+| 22.2 | 2022-Q4 | 12.1.0.2 | Friendly URLs | UT 42 |
 | 23.1 | 2023-Q2 | 19c | Friendly URLs | UT 42 |
 | 23.2 | 2023-Q4 | 19c | Friendly URLs | UT 42 |
 | 24.1 | 2024-Q2 | 19c | Friendly URLs | UT 42 |
@@ -214,12 +214,64 @@
 | IF [NOT] EXISTS for DDL | 23ai |
 | SQL Domains | 23ai |
 
+## New Item Types by Version
+
+| Item Type | Available From |
+|---|---|
+| Text Field, Number, Date, Select List, Checkbox, Radio | All |
+| Form Region (native) | 19.1+ |
+| Single Checkbox (boolean) | 20.2+ |
+| File Browse with drag-and-drop | 20.2+ |
+| New Date Picker (JET-based) | 21.1+ |
+| New Color Picker (JET-based) | 21.1+ |
+| Combobox (chips, free-entry) | 23.2+ |
+| Image Upload (crop, resize) | 23.2+ |
+| QR Code | 23.2+ |
+| Select One (LOV-based) | 24.1+ |
+| Select Many (LOV-based, JSON) | 24.1+ |
+
+## New Process Types by Version
+
+| Process Type | Available From |
+|---|---|
+| PL/SQL Code | All |
+| DML / Form Auto Processing | All |
+| Close Dialog | All |
+| Invoke API (declarative PL/SQL call) | 22.2+ |
+| Execution Chains | 23.1+ |
+| Background Execution | 23.1+ |
+| Download | 24.1+ |
+
+## Deprecated/Removed APIs
+
+### PL/SQL API Deprecations
+| API | Deprecated | Removed | Replacement |
+|---|---|---|---|
+| APEX_UTIL.STRING_TO_TABLE | 5.1 | 20.2 | APEX_STRING.SPLIT |
+| APEX_UTIL.TABLE_TO_STRING | 5.1 | 20.2 | APEX_STRING.JOIN |
+| APEX_UTIL.URL_ENCODE | 24.1 | — | UTL_URL.ESCAPE |
+| APEX_APPROVAL (package) | 24.1 | — | APEX_HUMAN_TASK |
+| APEX_AUTOMATION.ABORT | 24.1 | — | APEX_AUTOMATION.TERMINATE |
+| APEX_PLUGIN_UTIL.PRINT_DISPLAY_ONLY | 24.1 | — | APEX_PLUGIN_UTIL.PRINT_READ_ONLY |
+| APEX_PLUGIN_UTIL.EXECUTE_PLSQL_CODE | 24.2 | — | APEX_EXEC.EXECUTE_PLSQL |
+| APEX_LANG.MESSAGE | 24.2 | — | APEX_LANG.GET_MESSAGE |
+
+### JavaScript API Deprecations
+| API | Deprecated | Removed | Replacement |
+|---|---|---|---|
+| openModal / closeModal | 19.1 | 20.2 | apex.theme.openRegion/closeRegion |
+| $x_*, $f_*, htmldb_* (70+ legacy) | 19.2 | 20.1 | apex.item, apex.region, etc. |
+| jQuery UI | 20.1 | — | Native APEX components |
+| apex.theme42.util.mq | 20.1 | 22.1 | apex.theme.mq |
+| Tabular Forms | 20.1 | 20.2 | Interactive Grid |
+
 ## Password Verifier Compatibility (oracledb driver)
 
-| DB Version | Verifier | oracledb Thin Mode | oracledb Thick Mode |
-|---|---|---|---|
-| 11g | 10G (0x939) | NOT supported | Supported |
-| 12c+ | 12C (SHA-512) | Supported | Supported |
-| 18c+ | Default 12C | Supported | Supported |
+| Verifier | Algorithm | Introduced | oracledb Thin | oracledb Thick |
+|---|---|---|---|---|
+| 10G | DES-based | Oracle 10g | NOT supported | Supported |
+| 11G | SHA-1 | Oracle 11.1 | Supported | Supported |
+| 12C | SHA-512 | Oracle 12cR1 | Supported | Supported |
 
-If connecting to 11g/12c with old password verifiers, use Thick mode with Oracle Instant Client.
+If connecting to 11g/12c with old password verifiers (10G), use Thick mode with Oracle Instant Client.
+Check verifiers: `SELECT USERNAME, PASSWORD_VERSIONS FROM DBA_USERS;`
