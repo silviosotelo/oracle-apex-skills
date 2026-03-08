@@ -261,6 +261,41 @@ SELECT template_id, template_name FROM apex_application_templates
 WHERE application_id = :app_id AND template_type = 'Region';
 ```
 
+## Production Development Patterns
+
+### Page Architecture (MANDATORY)
+- **NEVER** create a direct Form page as entry point
+- **ALWAYS** use: IR (list with filters) → Form (edit page)
+- IR page: bordered Filter region + IR region + floating action buttons
+- Form page: opened from IR via native IR Link Column or "New" button
+- Modal dialogs only for lookups/selection
+
+### IR Link Column
+- Use native IR "Link Column" attribute (Target Page + Set Items) for edit links
+- Never add custom HTML edit columns — redundant and harder to maintain
+
+### Programmatic IR Creation
+Creating an IR region programmatically requires 4 internal components:
+1. Region (`wwv_flow_page_plugs`, `plug_source_type = 'NATIVE_IR'`)
+2. Worksheet (`wwv_flow_worksheets`, FK to region)
+3. Worksheet columns (`wwv_flow_worksheet_columns`, FK to worksheet)
+4. Default report (`wwv_flow_worksheet_rpts`, `application_user = 'APXWS_DEFAULT'`)
+Missing any causes ORA-01403 at render time.
+
+### LOV Standards
+- Format: `ID || ' - ' || Descripcion || ' (' || OtroDato || ')'`
+- Don't create Display Only items for LOV data — use Popup LOV additional return columns
+- With DISTINCT: ORDER BY must reference SELECT list columns, use `ORDER BY 1`
+
+### Table Name Discovery
+- Never assume table names from FK column names (e.g. `cobr_id_cobrador` ≠ table `cobrador`)
+- Always verify: `SELECT table_name FROM all_tables WHERE owner = :schema AND table_name LIKE '%keyword%'`
+
+### Large APEX ID Precision
+- JavaScript loses precision with 18+ digit APEX IDs
+- Use `TO_CHAR(id)` in queries, `SELECT id INTO v_id` in PL/SQL
+- Never hardcode IDs from JSON output — re-query with exact conditions
+
 ## References
 
 | Version | PL/SQL API | JS API |
