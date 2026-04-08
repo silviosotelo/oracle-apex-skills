@@ -296,7 +296,19 @@ Missing any causes ORA-01403 at render time.
 - Use `TO_CHAR(id)` in queries, `SELECT id INTO v_id` in PL/SQL
 - Never hardcode IDs from JSON output — re-query with exact conditions
 
-## References
+## Reference Files
+
+| File | Description |
+|------|-------------|
+| [references/apex-data-dictionary.md](references/apex-data-dictionary.md) | **APEX Data Dictionary Views** — Verified column names for all APEX_APPLICATION_* views. Prevents ORA-00904 errors. Common wrong/correct column name mapping. |
+| [references/apex-plsql-api.md](references/apex-plsql-api.md) | **APEX PL/SQL API** — All 41 packages with key methods, parameters, and code examples. Organized by category. |
+| [references/apex-js-api.md](references/apex-js-api.md) | **APEX JavaScript API** — All namespaces (apex.server, apex.item, apex.region, apex.page, apex.message, apex.navigation, apex.da, apex.util, apex.lang, apex.locale, apex.theme, apex.storage, apex.actions, apex.event, apex.env). |
+| [references/oracle-db-api.md](references/oracle-db-api.md) | **Oracle DB PL/SQL APIs** — DBMS_LOB, DBMS_SQL, DBMS_METADATA, DBMS_SCHEDULER, DBMS_CRYPTO, UTL_RAW/ENCODE/URL/HTTP, JSON_OBJECT_T, REGEXP, analytics, dictionary views. Combined PL/SQL+JS patterns. |
+| [references/interactive-grid.md](references/interactive-grid.md) | **Interactive Grid JS API** — Detailed IG widget methods, model API, record manipulation. |
+| [references/interactive-report.md](references/interactive-report.md) | **Interactive Report** — IR-specific patterns. |
+| [references/version-compatibility.md](references/version-compatibility.md) | **Version Compatibility** — Feature availability across APEX versions. |
+
+## Official Documentation Links
 
 | Version | PL/SQL API | JS API |
 |---|---|---|
