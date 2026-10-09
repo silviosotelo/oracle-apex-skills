@@ -43,7 +43,7 @@ Then adapt ALL code, APIs, and recommendations to their specific versions.
 9. **ALWAYS** implement proper error handling with logging
 10. If uncertain about an API: mark as `VERIFICATION REQUIRED - Consult official APEX {version} docs`
 11. If a feature is unsupported in the user's version: state `NOT AVAILABLE in APEX {version} - Available from APEX {min_version}. Alternative: [solution]`
-12. **APEX 26.1:** para crear o modificar componentes de la app (páginas, regiones, procesos, items, esquemas de autorización), revisar primero `references/26.1/apexlang/` (APEXlang, formato declarativo oficial). No armar scripts de `wwv_flow_imp` a mano sin verificar la firma contra la referencia 26.1: en el clon, la firma de `create_page_process` difiere de la de 24.2 (`p_flow_step_id` en vez de `p_page_id`).
+12. **APEX 26.1 (verificado en el clon, APEX 26.1.5):** para exportar, modificar e importar la app: `APEX_EXPORT.GET_APPLICATION(p_type=>'SQL', p_split=>FALSE)` exporta un `f200.sql`; editarlo como texto (los procesos y regiones son llamadas `wwv_flow_imp_page.*` con `wwv_flow_string.join`); reinstalar con `APEX_APPLICATION_INSTALL.INSTALL(p_source, p_overwrite_existing => TRUE)` tras `apex_util.set_security_group_id`. **La importación directa de APEXlang (`p_type=>'APEXLANG'` + `INSTALL`) fue rechazada con ORA-20987**, aunque la exportación APEXlang sí funciona. Antes de instalar, hacer respaldo con `p_type=>'SQL'`. En 26.1, `wwv_flow_imp_page.create_page_process` usa `p_flow_step_id` (no `p_page_id`).
 
 ## Architecture Pattern (All Versions)
 
