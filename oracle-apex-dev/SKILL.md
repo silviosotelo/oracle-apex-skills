@@ -1,6 +1,6 @@
 ---
 name: oracle-apex-dev
-description: Expert Oracle APEX development assistant for ALL versions (19.2 through 24.2). Use this skill whenever the user works with Oracle APEX pages, regions, items, processes, dynamic actions, JavaScript APIs (apex.server, apex.item, apex.region, apex.message, apex.theme), PL/SQL APEX packages (APEX_COLLECTION, APEX_UTIL, APEX_JSON, APEX_ESCAPE), Universal Theme styling, ORDS REST services, or wwv_flow_api programmatic page generation. Also trigger when user mentions APEX inline dialogs, modal pages, Interactive Reports, Classic Reports, form regions, AJAX callbacks, or any Oracle APEX UI development task. Even if they don't say "APEX" explicitly, trigger when building Oracle web applications with PL/SQL backend.
+description: Expert Oracle APEX development assistant for ALL versions (19.2 through 26.1). Use this skill whenever the user works with Oracle APEX pages, regions, items, processes, dynamic actions, JavaScript APIs (apex.server, apex.item, apex.region, apex.message, apex.theme), PL/SQL APEX packages (APEX_COLLECTION, APEX_UTIL, APEX_JSON, APEX_ESCAPE), Universal Theme styling, ORDS REST services, or wwv_flow_api programmatic page generation. Also trigger when user mentions APEX inline dialogs, modal pages, Interactive Reports, Classic Reports, form regions, AJAX callbacks, or any Oracle APEX UI development task. Even if they don't say "APEX" explicitly, trigger when building Oracle web applications with PL/SQL backend.
 ---
 
 # Oracle APEX Development Expert (Multi-Version)
@@ -28,6 +28,7 @@ Then adapt ALL code, APIs, and recommendations to their specific versions.
 | 22.1 - 22.2 | 12.1.0.2+ | Friendly URLs | +APEX_APPROVAL, +Dynamic Content, +Invoke API process |
 | 23.1 - 23.2 | 19c+ | Friendly URLs | +Template Components, +Workflow, +APEX_PWA, +Combobox, +QR Code |
 | 24.1 - 24.2 | 19c+ | Friendly URLs | +APEX_AI, +Select One/Many, +Vector Search (24.2), +JSON Sources |
+| 26.1 | 19c (verificado en el clon) | Friendly URLs | +APEXlang (formato declarativo de componentes), referencia completa en `references/26.1/` |
 
 ## Golden Rules
 
@@ -42,6 +43,7 @@ Then adapt ALL code, APIs, and recommendations to their specific versions.
 9. **ALWAYS** implement proper error handling with logging
 10. If uncertain about an API: mark as `VERIFICATION REQUIRED - Consult official APEX {version} docs`
 11. If a feature is unsupported in the user's version: state `NOT AVAILABLE in APEX {version} - Available from APEX {min_version}. Alternative: [solution]`
+12. **APEX 26.1:** para crear o modificar componentes de la app (páginas, regiones, procesos, items, esquemas de autorización), revisar primero `references/26.1/apexlang/` (APEXlang, formato declarativo oficial). No armar scripts de `wwv_flow_imp` a mano sin verificar la firma contra la referencia 26.1: en el clon, la firma de `create_page_process` difiere de la de 24.2 (`p_flow_step_id` en vez de `p_page_id`).
 
 ## Architecture Pattern (All Versions)
 
@@ -307,11 +309,15 @@ Missing any causes ORA-01403 at render time.
 | [references/interactive-grid.md](references/interactive-grid.md) | **Interactive Grid JS API** — Detailed IG widget methods, model API, record manipulation. |
 | [references/interactive-report.md](references/interactive-report.md) | **Interactive Report** — IR-specific patterns. |
 | [references/version-compatibility.md](references/version-compatibility.md) | **Version Compatibility** — Feature availability across APEX versions. |
+| [references/26.1/plsql/](references/26.1/plsql/) | **APEX 26.1 PL/SQL API** — Un archivo por paquete (64 paquetes), texto extraído de la referencia oficial `aeapi`. Usar `grep` sobre la carpeta para ubicar un procedimiento. |
+| [references/26.1/js/](references/26.1/js/) | **APEX 26.1 JavaScript API** — Una página por namespace/widget (47 páginas), extraída de la referencia oficial `aexjs`. |
+| [references/26.1/apexlang/](references/26.1/apexlang/) | **APEXlang 26.1** — Índice (`INDEX.md`), 1143 componentes agrupados por padre en `components/`, y la gramática oficial `apexlang.ebnf`. Fuente: referencia `apxln`. |
 
 ## Official Documentation Links
 
 | Version | PL/SQL API | JS API |
 |---|---|---|
+| 26.1 | [aeapi](https://docs.oracle.com/en/database/oracle/apex/26.1/aeapi/) | [aexjs](https://docs.oracle.com/en/database/oracle/apex/26.1/aexjs/) (APEXlang: [apxln](https://docs.oracle.com/en/database/oracle/apex/26.1/apxln/index.html)) |
 | 24.2 | [aeapi](https://docs.oracle.com/en/database/oracle/apex/24.2/aeapi/) | [aexjs](https://docs.oracle.com/en/database/oracle/apex/24.2/aexjs/) |
 | 24.1 | [aeapi](https://docs.oracle.com/en/database/oracle/apex/24.1/aeapi/) | [aexjs](https://docs.oracle.com/en/database/oracle/apex/24.1/aexjs/) |
 | 23.2 | [aeapi](https://docs.oracle.com/en/database/oracle/apex/23.2/aeapi/) | [aexjs](https://docs.oracle.com/en/database/oracle/apex/23.2/aexjs/) |

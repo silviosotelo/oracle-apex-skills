@@ -275,3 +275,10 @@
 
 If connecting to 11g/12c with old password verifiers (10G), use Thick mode with Oracle Instant Client.
 Check verifiers: `SELECT USERNAME, PASSWORD_VERSIONS FROM DBA_USERS;`
+
+## APEX 26.1 — Referencia completa incorporada
+
+- Fuentes oficiales 26.1: `aeapi` (PL/SQL, PDF completo), `aexjs` (JavaScript, JSDoc) y `apxln` (APEXlang).
+- Ubicación: `references/26.1/` (`plsql/`, `js/`, `apexlang/`).
+- APEXlang es el formato declarativo de componentes de 26.1. Su gramática está en `references/26.1/apexlang/apexlang.ebnf` y cada componente tiene su tabla de propiedades en `references/26.1/apexlang/components/`.
+- Verificado en el clon de desarrollo (APEX 26.1.5, Oracle 19c): la firma de `wwv_flow_imp_page.create_page_process` requiere `p_flow_step_id` (no `p_page_id`), lo que confirma que los scripts de exportación de 24.2 no se pueden reutilizar sin revisar.
